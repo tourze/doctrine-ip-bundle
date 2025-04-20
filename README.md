@@ -1,34 +1,38 @@
 # Doctrine IP Bundle
 
-A Symfony bundle that automatically tracks IP addresses for entity creation and updates.
+[![Latest Version](https://img.shields.io/packagist/v/tourze/doctrine-ip-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/doctrine-ip-bundle)
+[![Total Downloads](https://img.shields.io/packagist/dt/tourze/doctrine-ip-bundle.svg?style=flat-square)](https://packagist.org/packages/tourze/doctrine-ip-bundle)
 
-一个用于自动追踪实体创建和更新时 IP 地址的 Symfony 包。
+A Symfony bundle that automatically tracks and records IP addresses for entity creation and updates using PHP 8.1 attributes.
 
-## Features | 功能
+## Features
 
-- Automatically tracks IP addresses when entities are created | 自动追踪实体创建时的 IP 地址
-- Automatically tracks IP addresses when entities are updated | 自动追踪实体更新时的 IP 地址
-- Uses PHP 8.1 attributes for configuration | 使用 PHP 8.1 属性进行配置
-- Supports private properties | 支持私有属性
-- Thread-safe implementation | 线程安全实现
+- Automatically tracks IP addresses when entities are created
+- Automatically tracks IP addresses when entities are updated
+- Uses PHP 8.1 attributes for simple configuration
+- Supports private properties through PropertyAccessor
+- Thread-safe implementation with ResetInterface
+- Integrates with Symfony's request cycle to capture client IPs
+- Zero configuration required - works out of the box
 
-## Requirements | 要求
+## Requirements
 
 - PHP 8.1 or higher
 - Symfony 6.4 or higher
+- Doctrine ORM 2.20/3.0 or higher
 - Doctrine Bundle 2.13 or higher
 
-## Installation | 安装
+## Installation
 
 ```bash
 composer require tourze/doctrine-ip-bundle
 ```
 
-## Usage | 使用方法
+The bundle will be automatically registered thanks to Symfony Flex.
 
-Add the following attributes to your entity properties:
+## Usage
 
-在你的实体属性上添加以下属性：
+Add the appropriate attributes to your entity properties:
 
 ```php
 use Tourze\DoctrineIpBundle\Attribute\CreateIpColumn;
@@ -36,32 +40,46 @@ use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
 
 class YourEntity
 {
+    // This property will store the IP address when the entity is created
     #[CreateIpColumn]
     private ?string $createIp = null;
 
+    // This property will store the IP address when the entity is updated
     #[UpdateIpColumn]
     private ?string $updateIp = null;
+
+    // Getters and setters
+    public function getCreateIp(): ?string
+    {
+        return $this->createIp;
+    }
+
+    public function getUpdateIp(): ?string
+    {
+        return $this->updateIp;
+    }
 }
 ```
 
-## Configuration | 配置
+## How It Works
+
+The bundle works by listening to Doctrine's lifecycle events:
+
+1. It registers event listeners for Doctrine's `prePersist` and `preUpdate` events
+2. It captures the client IP from the request through Symfony's `kernel.request` event
+3. When an entity is created or updated, it checks for properties with the appropriate attributes
+4. If found, it automatically sets the client IP to those properties
+
+## Configuration
 
 The bundle is auto-configured. No additional configuration is needed.
 
-该包是自动配置的，无需额外配置。
+## Dependencies
 
-## How it works | 工作原理
+This bundle automatically requires and configures:
 
-1. The bundle listens to Doctrine's `prePersist` and `preUpdate` events
-2. It also listens to Symfony's `kernel.request` event to get the client IP
-3. When an entity is created or updated, it automatically sets the IP address to the configured properties
+- `tourze/doctrine-entity-checker-bundle`
 
-1. 该包监听 Doctrine 的 `prePersist` 和 `preUpdate` 事件
-2. 同时监听 Symfony 的 `kernel.request` 事件以获取客户端 IP
-3. 当实体被创建或更新时，自动将 IP 地址设置到配置的属性中
-
-## License | 许可证
+## License
 
 This bundle is licensed under the MIT License.
-
-该包基于 MIT 许可证。
