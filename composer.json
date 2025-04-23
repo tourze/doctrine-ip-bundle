@@ -13,7 +13,7 @@
     "symfony/framework-bundle": "^6.4",
     "symfony/property-access": "^6.4",
     "symfony/yaml": "^6.4 || ^7.1",
-    "symfony/service-contracts": "^3",
+    "symfony/service-contracts": "^3.5",
     "tourze/bundle-dependency": "0.0.*",
     "tourze/doctrine-entity-checker-bundle": "0.0.*",
     "psr/log": "^3|^2|^1"
