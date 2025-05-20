@@ -9,6 +9,7 @@ use Doctrine\ORM\Events;
 use Doctrine\Persistence\ObjectManager;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\DependencyInjection\Attribute\AutoconfigureTag;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -27,7 +28,7 @@ class IpTrackListener implements ResetInterface, EntityCheckerInterface
 
     public function __construct(
         private readonly LoggerInterface $logger,
-        private readonly PropertyAccessor $propertyAccessor,
+        #[Autowire(service: 'doctrine-ip.property-accessor')] private readonly PropertyAccessor $propertyAccessor,
     ) {
     }
 
