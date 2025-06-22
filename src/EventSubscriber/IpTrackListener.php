@@ -34,7 +34,7 @@ class IpTrackListener implements ResetInterface, EntityCheckerInterface
 
     public function prePersist(PrePersistEventArgs $args): void
     {
-        if (!$this->getClientIp()) {
+        if ($this->getClientIp() === null) {
             return;
         }
         $this->prePersistEntity($args->getObjectManager(), $args->getObject());
@@ -42,7 +42,7 @@ class IpTrackListener implements ResetInterface, EntityCheckerInterface
 
     public function prePersistEntity(ObjectManager $objectManager, object $entity): void
     {
-        if (!$this->getClientIp()) {
+        if ($this->getClientIp() === null) {
             return;
         }
 
@@ -83,7 +83,7 @@ class IpTrackListener implements ResetInterface, EntityCheckerInterface
 
     public function preUpdate(PreUpdateEventArgs $args): void
     {
-        if (!$this->getClientIp()) {
+        if ($this->getClientIp() === null) {
             return;
         }
 
@@ -93,7 +93,7 @@ class IpTrackListener implements ResetInterface, EntityCheckerInterface
 
     public function preUpdateEntity(ObjectManager $objectManager, object $entity, PreUpdateEventArgs $eventArgs): void
     {
-        if (!$this->getClientIp()) {
+        if ($this->getClientIp() === null) {
             return;
         }
 

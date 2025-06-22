@@ -88,6 +88,11 @@ class IpTrackListenerTest extends TestCase
             {
                 return $this->createIp;
             }
+
+            public function setCreateIp(?string $createIp): void
+            {
+                $this->createIp = $createIp;
+            }
         };
 
         // 直接调用实体处理方法，不使用final类的PrePersistEventArgs

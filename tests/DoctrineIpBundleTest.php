@@ -21,7 +21,6 @@ class DoctrineIpBundleTest extends TestCase
         // 测试依赖包设置是否正确
         $dependencies = DoctrineIpBundle::getBundleDependencies();
 
-        $this->assertIsArray($dependencies);
         $this->assertArrayHasKey(DoctrineEntityCheckerBundle::class, $dependencies);
         $this->assertEquals(['all' => true], $dependencies[DoctrineEntityCheckerBundle::class]);
     }
