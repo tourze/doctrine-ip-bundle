@@ -21,7 +21,7 @@ use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
 
 #[AsDoctrineListener(event: Events::prePersist)]
 #[AsDoctrineListener(event: Events::preUpdate)]
-#[AutoconfigureTag('as-coroutine')]
+#[AutoconfigureTag(name: 'as-coroutine')]
 class IpTrackListener implements ResetInterface, EntityCheckerInterface
 {
     private ?string $clientIp = null;
