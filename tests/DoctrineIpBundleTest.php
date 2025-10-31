@@ -1,27 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\DoctrineIpBundle\Tests;
 
-use PHPUnit\Framework\TestCase;
-use Tourze\BundleDependency\BundleDependencyInterface;
-use Tourze\DoctrineEntityCheckerBundle\DoctrineEntityCheckerBundle;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use Tourze\DoctrineIpBundle\DoctrineIpBundle;
+use Tourze\PHPUnitSymfonyKernelTest\AbstractBundleTestCase;
 
-class DoctrineIpBundleTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(DoctrineIpBundle::class)]
+#[RunTestsInSeparateProcesses]
+final class DoctrineIpBundleTest extends AbstractBundleTestCase
 {
-    public function testBundleImplementsDependencyInterface(): void
-    {
-        // 测试包是否实现了BundleDependencyInterface接口
-        $bundle = new DoctrineIpBundle();
-        $this->assertInstanceOf(BundleDependencyInterface::class, $bundle);
-    }
-
-    public function testBundleDependencies(): void
-    {
-        // 测试依赖包设置是否正确
-        $dependencies = DoctrineIpBundle::getBundleDependencies();
-
-        $this->assertArrayHasKey(DoctrineEntityCheckerBundle::class, $dependencies);
-        $this->assertEquals(['all' => true], $dependencies[DoctrineEntityCheckerBundle::class]);
-    }
 }

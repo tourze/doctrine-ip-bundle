@@ -1,25 +1,56 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\DoctrineIpBundle\Tests\DependencyInjection;
 
-use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\PropertyAccess\PropertyAccessor;
 use Tourze\DoctrineIpBundle\DependencyInjection\DoctrineIpExtension;
 use Tourze\DoctrineIpBundle\EventSubscriber\IpTrackListener;
+use Tourze\PHPUnitSymfonyUnitTest\AbstractDependencyInjectionExtensionTestCase;
 
-class DoctrineIpExtensionTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(DoctrineIpExtension::class)]
+final class DoctrineIpExtensionTest extends AbstractDependencyInjectionExtensionTestCase
 {
-    public function testLoad(): void
+    private DoctrineIpExtension $extension;
+
+    private ContainerBuilder $container;
+
+    protected function setUp(): void
     {
-        // 测试扩展类加载配置
-        $extension = new DoctrineIpExtension();
-        $container = new ContainerBuilder();
+        parent::setUp();
+        $this->extension = new DoctrineIpExtension();
+        $this->container = new ContainerBuilder();
+        $this->container->setParameter('kernel.environment', 'test');
+    }
 
-        $extension->load([], $container);
+    public function testExtensionLoadsServicesCorrectly(): void
+    {
+        $this->extension->load([], $this->container);
 
-        // 检查服务定义是否正确加载
-        $this->assertTrue($container->hasDefinition(IpTrackListener::class) ||
-            $container->hasAlias(IpTrackListener::class),
-            '容器中应该有IpTrackListener服务的定义');
+        // 检查IpTrackListener服务是否可用
+        $this->assertTrue(
+            $this->container->has(IpTrackListener::class),
+            'IpTrackListener服务应该在容器中注册'
+        );
+    }
+
+    public function testPropertyAccessorServiceRegistered(): void
+    {
+        $this->extension->load([], $this->container);
+
+        // 检查PropertyAccessor服务定义
+        $this->assertTrue(
+            $this->container->has('doctrine-ip.property-accessor'),
+            '容器中应该有PropertyAccessor服务'
+        );
+
+        $propertyAccessor = $this->container->get('doctrine-ip.property-accessor');
+        $this->assertInstanceOf(PropertyAccessor::class, $propertyAccessor);
     }
 }

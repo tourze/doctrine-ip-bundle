@@ -1,22 +1,27 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\DoctrineIpBundle\Tests\Attribute;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\DoctrineIpBundle\Attribute\UpdateIpColumn;
 
-class UpdateIpColumnTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(UpdateIpColumn::class)]
+final class UpdateIpColumnTest extends TestCase
 {
     public function testAttributeCreation(): void
     {
-        // 测试能否成功创建属性实例
         $attribute = new UpdateIpColumn();
         $this->assertInstanceOf(UpdateIpColumn::class, $attribute);
     }
 
     public function testAttributeTargetProperty(): void
     {
-        // 测试属性是否正确标记为只能用于属性
         $reflection = new \ReflectionClass(UpdateIpColumn::class);
         $attributes = $reflection->getAttributes(\Attribute::class);
 

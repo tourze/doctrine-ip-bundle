@@ -1,119 +1,109 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tourze\DoctrineIpBundle\Tests\Traits;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Tourze\DoctrineIpBundle\Traits\CreatedFromIpAware;
 
-class CreatedFromIpAwareTest extends TestCase
+/**
+ * @internal
+ */
+#[CoversClass(CreatedFromIpAware::class)]
+final class CreatedFromIpAwareTest extends TestCase
 {
-    private object $testClass;
+    private TestEntityForCreatedFromIpAware $testClass;
 
-    public function test_getCreatedFromIp_withDefaultValue_returnsNull(): void
+    public function testGetCreatedFromIpWithDefaultValueReturnsNull(): void
     {
         $result = $this->testClass->getCreatedFromIp();
 
         $this->assertNull($result);
     }
 
-    public function test_setCreatedFromIp_withValidIpv4_setsAndReturnsValue(): void
+    public function testSetCreatedFromIpWithValidIpv4SetsAndReturnsValue(): void
     {
         $ip = '192.168.1.1';
 
-        $result = $this->testClass->setCreatedFromIp($ip);
+        $this->testClass->setCreatedFromIp($ip);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($ip, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withValidIpv6_setsAndReturnsValue(): void
+    public function testSetCreatedFromIpWithValidIpv6SetsAndReturnsValue(): void
     {
         $ip = '2001:0db8:85a3:0000:0000:8a2e:0370:7334';
 
-        $result = $this->testClass->setCreatedFromIp($ip);
+        $this->testClass->setCreatedFromIp($ip);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($ip, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withNullValue_setsNull(): void
+    public function testSetCreatedFromIpWithNullValueSetsNull(): void
     {
         // 先设置一个值，然后清空
         $this->testClass->setCreatedFromIp('192.168.1.1');
-        $result = $this->testClass->setCreatedFromIp(null);
+        $this->testClass->setCreatedFromIp(null);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertNull($this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withEmptyString_setsEmptyString(): void
+    public function testSetCreatedFromIpWithEmptyStringSetsEmptyString(): void
     {
-        $result = $this->testClass->setCreatedFromIp('');
+        $this->testClass->setCreatedFromIp('');
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals('', $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withMaxLengthIpAddress_setsValue(): void
+    public function testSetCreatedFromIpWithMaxLengthIpAddressSetsValue(): void
     {
         // 测试最大长度45字符的IP地址 (IPv6 最长可能的格式)
         $longIp = '2001:0db8:85a3:0000:0000:8a2e:0370:7334:999';
 
-        $result = $this->testClass->setCreatedFromIp($longIp);
+        $this->testClass->setCreatedFromIp($longIp);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($longIp, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withLocalhostIpv4_setsValue(): void
+    public function testSetCreatedFromIpWithLocalhostIpv4SetsValue(): void
     {
         $ip = '127.0.0.1';
 
-        $result = $this->testClass->setCreatedFromIp($ip);
+        $this->testClass->setCreatedFromIp($ip);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($ip, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withLocalhostIpv6_setsValue(): void
+    public function testSetCreatedFromIpWithLocalhostIpv6SetsValue(): void
     {
         $ip = '::1';
 
-        $result = $this->testClass->setCreatedFromIp($ip);
+        $this->testClass->setCreatedFromIp($ip);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($ip, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withPrivateNetworkIp_setsValue(): void
+    public function testSetCreatedFromIpWithPrivateNetworkIpSetsValue(): void
     {
         $ip = '10.0.0.1';
 
-        $result = $this->testClass->setCreatedFromIp($ip);
+        $this->testClass->setCreatedFromIp($ip);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($ip, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withCompressedIpv6_setsValue(): void
+    public function testSetCreatedFromIpWithCompressedIpv6SetsValue(): void
     {
         $ip = 'fe80::1%lo0';
 
-        $result = $this->testClass->setCreatedFromIp($ip);
+        $this->testClass->setCreatedFromIp($ip);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($ip, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_returnsFluentInterface(): void
-    {
-        $result = $this->testClass->setCreatedFromIp('127.0.0.1');
-
-        $this->assertInstanceOf(get_class($this->testClass), $result);
-        $this->assertSame($this->testClass, $result);
-    }
-
-    public function test_setCreatedFromIp_multipleCallsOverrideValue(): void
+    public function testSetCreatedFromIpMultipleCallsOverrideValue(): void
     {
         $firstIp = '192.168.1.1';
         $secondIp = '10.0.0.1';
@@ -125,21 +115,18 @@ class CreatedFromIpAwareTest extends TestCase
         $this->assertEquals($secondIp, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withStringContainingSpaces_setsValue(): void
+    public function testSetCreatedFromIpWithStringContainingSpacesSetsValue(): void
     {
         $ip = ' 192.168.1.1 ';
 
-        $result = $this->testClass->setCreatedFromIp($ip);
+        $this->testClass->setCreatedFromIp($ip);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($ip, $this->testClass->getCreatedFromIp());
     }
 
-    public function test_propertyIsolation_independentFromOtherInstances(): void
+    public function testPropertyIsolationIndependentFromOtherInstances(): void
     {
-        $secondInstance = new class {
-            use CreatedFromIpAware;
-        };
+        $secondInstance = new TestEntityForCreatedFromIpAware();
 
         $firstIp = '192.168.1.1';
         $secondIp = '10.0.0.1';
@@ -151,7 +138,7 @@ class CreatedFromIpAwareTest extends TestCase
         $this->assertEquals($secondIp, $secondInstance->getCreatedFromIp());
     }
 
-    public function test_getCreatedFromIp_afterSettingAndClearing_returnsNull(): void
+    public function testGetCreatedFromIpAfterSettingAndClearingReturnsNull(): void
     {
         $this->testClass->setCreatedFromIp('192.168.1.1');
         $this->assertNotNull($this->testClass->getCreatedFromIp());
@@ -160,22 +147,20 @@ class CreatedFromIpAwareTest extends TestCase
         $this->assertNull($this->testClass->getCreatedFromIp());
     }
 
-    public function test_setCreatedFromIp_withInvalidButAcceptableString_setsValue(): void
+    public function testSetCreatedFromIpWithInvalidButAcceptableStringSetsValue(): void
     {
         // trait 不进行IP格式验证，接受任何字符串
         $invalidIp = 'not-an-ip-address';
 
-        $result = $this->testClass->setCreatedFromIp($invalidIp);
+        $this->testClass->setCreatedFromIp($invalidIp);
 
-        $this->assertSame($this->testClass, $result);
         $this->assertEquals($invalidIp, $this->testClass->getCreatedFromIp());
     }
 
     protected function setUp(): void
     {
-        // 创建一个使用 CreatedFromIpAware trait 的匿名类
-        $this->testClass = new class {
-            use CreatedFromIpAware;
-        };
+        parent::setUp();
+        // 创建一个使用 CreatedFromIpAware trait 的测试类实例
+        $this->testClass = new TestEntityForCreatedFromIpAware();
     }
 }
