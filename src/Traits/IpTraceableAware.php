@@ -44,7 +44,7 @@ trait IpTraceableAware
      *
      * @return string|null 创建时的IP地址，如果未设置则返回null
      */
-    public function getCreatedFromIp(): ?string
+    final public function getCreatedFromIp(): ?string
     {
         return $this->createdFromIp;
     }
@@ -54,7 +54,7 @@ trait IpTraceableAware
      *
      * @param string|null $createdFromIp 创建时的IP地址
      */
-    public function setCreatedFromIp(?string $createdFromIp): void
+    final public function setCreatedFromIp(?string $createdFromIp): void
     {
         $this->createdFromIp = $createdFromIp;
     }
@@ -64,7 +64,7 @@ trait IpTraceableAware
      *
      * @return string|null 最后更新时的IP地址，如果未设置则返回null
      */
-    public function getUpdatedFromIp(): ?string
+    final public function getUpdatedFromIp(): ?string
     {
         return $this->updatedFromIp;
     }
@@ -74,7 +74,7 @@ trait IpTraceableAware
      *
      * @param string|null $updatedFromIp 更新时的IP地址
      */
-    public function setUpdatedFromIp(?string $updatedFromIp): void
+    final public function setUpdatedFromIp(?string $updatedFromIp): void
     {
         $this->updatedFromIp = $updatedFromIp;
     }
